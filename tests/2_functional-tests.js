@@ -48,14 +48,29 @@ suite("Functional Tests", function () {
         .send(req)
         .end(function (err, res) {
           // console.log(res.text)
-          assert.deepEqual(res.body, expectedTraveller, 'right')
-          assert.equal(res.status, 200)
+          assert.equal(res.status, 200);
+          assert.equal(res.type, 'application/json');
+          assert.equal(res.body.name, 'Cristoforo');
+          assert.equal(res.body.surname, 'Colombo');
           done();
         });
     });
     // #4
     test('send {surname: "da Verrazzano"}', function (done) {
-      assert.fail();
+      const req = {
+        surname: 'da Verrazzano'
+      }
+
+      chai
+        .request(server)
+        .put('/travellers')
+        .send(req)
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.equal(res.type, 'application/json')
+          assert.equal(res.body.name, 'Giovanni')
+          assert.equal(req.body.surname, 'da Verrazzano')
+        })
 
       done();
     });
@@ -63,6 +78,8 @@ suite("Functional Tests", function () {
 });
 
 const Browser = require("zombie");
+const { application } = require("express");
+const { json } = require("body-parser");
 
 suite("Functional Tests with Zombie.js", function () {
 
