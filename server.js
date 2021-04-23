@@ -21,6 +21,7 @@ app.get('/hello', function (req, res) {
 
 const travellers = function (req, res) {
   let data = {};
+  // console.log('body', req.body)
   if (req.body && req.body.surname) {
     switch (req.body.surname.toLowerCase()) {
       case 'polo':
@@ -58,7 +59,8 @@ const travellers = function (req, res) {
         }
     }
   }
-  res.json(data);
+  // console.log('data', data)
+  res.json(data).status(200);
 };
 
 

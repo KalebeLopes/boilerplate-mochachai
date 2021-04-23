@@ -32,13 +32,24 @@ suite("Functional Tests", function () {
     });
     // #3
     test('send {surname: "Colombo"}', function (done) {
+      const req = {
+        surname: 'Colombo'
+      }
+
+      const expectedTraveller = {
+        name: 'Cristoforo',
+        surname: 'Colombo',
+        dates: '1451 - 1506'
+      }
+
       chai
         .request(server)
         .put("/travellers")
-
+        .send(req)
         .end(function (err, res) {
-          assert.fail();
-
+          // console.log(res.text)
+          assert.deepEqual(res.body, expectedTraveller, 'right')
+          assert.equal(res.status, 200)
           done();
         });
     });
