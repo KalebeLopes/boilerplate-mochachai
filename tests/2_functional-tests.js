@@ -69,26 +69,33 @@ suite("Functional Tests", function () {
           assert.equal(res.status, 200)
           assert.equal(res.type, 'application/json')
           assert.equal(res.body.name, 'Giovanni')
-          assert.equal(req.body.surname, 'da Verrazzano')
-        })
-
-      done();
+          assert.equal(res.body.surname, 'da Verrazzano')
+          done();
+        }) 
     });
   });
 });
 
 const Browser = require("zombie");
+Browser.site = 'https://boilerplate-mochachai.kalebelopes.repl.co'
 const { application } = require("express");
 const { json } = require("body-parser");
 
 suite("Functional Tests with Zombie.js", function () {
+  const browser = new Browser();
+
+  suiteSetup(function(done) { 
+    return browser.visit('/', done)
+  })
 
   suite('"Famous Italian Explorers" form', function () {
     // #5
     test('submit "surname" : "Colombo" - write your e2e test...', function (done) {
       browser.fill("surname", "Colombo").pressButton("submit", function () {
-        assert.fail();
-
+        browser.assert.status(200)
+        browser.assert.text('span#name', 'Cristoforo')
+        browser.assert.text('span#surname', 'Colombo')
+        browser.assert.element('span#dates', 1)
         done();
       });
     });
